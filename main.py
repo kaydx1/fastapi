@@ -5,31 +5,39 @@ import os.path
 
 app = FastAPI()
 
+file_path = "./data/counter.txt"
 
 
-@app.get("/items")
-async def read_item():
-    file_path = "./data/counter.txt"
-    if os.path.exists(file_path):
-        f = open(file_path, 'r')
-        counter = f.readline()
+def check_file_exist(path):
+    
+    return os.path.exists(path)
+
+def read_file(path):
+    if check_file_exist(file_path):
+        f = open(path, 'r')
+        counter = int(f.readline())
         f.close()
-        if counter == '':
-            f = open(file_path, 'w')
-            f.write('1')
-            f.close()
-            counter = 1
-            return {"counter": counter}
-        else:
-            f = open(file_path, 'w')
-            counter = int(counter)+1
-            f.write(str(counter))
-            f.close()
-            return {"counter": counter}
+        return counter
     else:
-        f = open(file_path, 'w+')
-        f.close()
-        return {"counter": 1}
+        return 0
+          
+def write_to_file(path):
+    counter = read_file(path)
+    f = open(path, 'w')
+    counter += 1
+    f.write(str(counter))
+    f.close()
+    return counter
+
+
+@app.get("/items1")
+async def read():
+    return read_file(file_path)
+
+@app.post("/items2")
+async def count():
+    return write_to_file(file_path)
+
 
 
 
