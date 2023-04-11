@@ -1,13 +1,16 @@
-import os.path
+import os.path, os
 
-file_path = "./data/counter.txt"
-
-def check_file_exist(path):
+if 'DATA_PATH' in os.environ:
+    file_path = os.environ['DATA_PATH']
+else:
+    file_path = "./data/counter.txt"
+    
+def _check_file_exist(path):
     
     return os.path.exists(path)
 
 def get_counter() -> int:
-    if check_file_exist(file_path):
+    if _check_file_exist(file_path):
         f = open(file_path, 'r')
         counter = int(f.readline())
         f.close()
