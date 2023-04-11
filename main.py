@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from lib.counter import get_counter, increase_counter 
+from lib.counter import get_counter, increase_counter
 
 app = FastAPI()
 
